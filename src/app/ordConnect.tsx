@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, useState } from 'react';
 import {
   useOrdConnect,
@@ -7,22 +9,24 @@ import {
 import { useCallback } from 'react';
 import { Verifier } from 'bip322-js';
 
-const OrdConnectComponent: FC<{}> = ({}) => {
+const OrdConnectComponent: FC = () => {
   const { address, wallet } = useOrdConnect();
   const { signMsg, error: signMessageError } = useSignMessage();
   const [verifiedMessage, setVerifiedMessage] = useState(false);
 
   const handleSignMessage = useCallback(async () => {
+    console.log(address);
     if (!address.ordinals) {
       throw new Error('No payment address');
     }
     const message =
       'Authenticate this message to access to verify wallet for fantasy.top airdrop';
     const signed = await signMsg(address.ordinals, message);
+    if (!signed) return;
     setVerifiedMessage(
       Verifier.verifySignature(address.ordinals, message, signed)
     );
-  }, [address.ordinals, signMsg]);
+  }, [address, signMsg]);
 
   return (
     <>

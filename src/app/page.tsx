@@ -1,7 +1,10 @@
 'use client';
 
-import ClientLayout from './client-layout';
-import OrdConnectComponent from './ordConnect';
+import dynamic from 'next/dynamic';
+const ClientLayout = dynamic(() => import('./client-layout'), { ssr: false });
+const OrdConnectComponent = dynamic(() => import('./ordConnect'), {
+  ssr: false,
+});
 
 export default function Home() {
   return (
